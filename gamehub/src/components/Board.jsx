@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import Square from "./Square";
 
-export default function Board() {
-  const [squares, setSquares] = useState(Array(9).fill(null));
-  const [isNextX, setIsNextX] = useState(true);
+export default function Board({xIsNext, squares, handlePlay}) {
   const [status, setStatus] = useState(null);
 
   useEffect(() => { 
 const winner = calculateWinner(squares);
   if (winner) setStatus( `Winner: ${winner}`);
-  else setStatus(`Next player: ${isNextX ? 'X' : 'O'}`);
-  },[squares, isNextX])
+  else setStatus(`Next player: ${xIsNext ? 'X' : 'O'}`);
+  },[squares, xIsNext])
 
   const calculateWinner = (board) => {
   // List of indexes of all possible winning combinations
@@ -38,12 +36,10 @@ const winner = calculateWinner(squares);
 
   const handleClick = (i) => {
     if (squares[i] || calculateWinner(squares)) return;
-    console.log(i)
     const nextSquares = squares.slice();
-    if (isNextX) nextSquares[i] = 'X';
+    if (xIsNext) nextSquares[i] = 'X';
       else nextSquares[i] = 'O';
-    setIsNextX(!isNextX);
-    setSquares(nextSquares);
+    handlePlay(nextSquares)
   };
 
   
