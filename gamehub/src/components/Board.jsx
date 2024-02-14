@@ -1,15 +1,7 @@
 import { useState, useEffect } from "react";
 import Square from "./Square";
 
-export default function Board({xIsNext, squares, handlePlay}) {
-  const [status, setStatus] = useState(null);
-
-  useEffect(() => { 
-const winner = calculateWinner(squares);
-  if (winner) setStatus( `Winner: ${winner}`);
-  else setStatus(`Next player: ${xIsNext ? 'X' : 'O'}`);
-  },[squares, xIsNext])
-
+export default function Board({ squares, handlePlay }) {  
   const calculateWinner = (board) => {
   // List of indexes of all possible winning combinations
  const winPatterns = [
@@ -32,15 +24,32 @@ const winner = calculateWinner(squares);
   }
 
   return null; // No winner
-}
+  }
+  
 
+  
+  
   const handleClick = (i) => {
     if (squares[i] || calculateWinner(squares)) return;
     const nextSquares = squares.slice();
-    if (xIsNext) nextSquares[i] = 'X';
-      else nextSquares[i] = 'O';
+    if (lastMove(squares) !== 'X') { nextSquares[i] = 'X'; }
+    else { 
+      
+      nextSquares[i] = 'O'; status = ('Next player: X');
+    }
+    
     handlePlay(nextSquares)
   };
+  
+  const lastMove = (moves) => {
+    console.log('moves', moves);
+    return moves.reverse().find(move => move !== null);
+  }
+  let status;
+  const winner = calculateWinner(squares);
+  console.log('last mobe is    ', lastMove(squares))
+  if (winner) status = (`Winner: ${winner}`);
+else status = (`Next player: ${lastMove(squares) === undefined ? 'X' : lastMove(squares) }`);
 
   
   return (

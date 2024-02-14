@@ -1,26 +1,44 @@
 import Board from './Board';
 import { useState } from 'react';
 export default function Game() {
-  const [xIsNext, setXIsNext] = useState(true);
   const [history, setHistory] = useState([Array(9).fill(null)]);
-  const currentSquares = history[history.length - 1];
+  const [currentSquares, setCurrectSquares] = useState(history[history.length - 1]);
+  const [nextMove, setNextMove] = useState('');
+
+    const moves = history.map((squares, move) => {
+      let description;
+      if (move > 0) {
+        description = 'Go to move #' + move;
+      } else {
+        description = 'Refresh game';
+      }
+      return (
+        <li key={move}>
+          <button onClick={() => jumpTo(move)}>{description}</button>
+        </li>
+      );
+    })
   
   function handlePlay(nextSquares) {
     setHistory([...history, nextSquares]);
-    setXIsNext(!xIsNext);
+    setCurrectSquares(nextSquares);
+    
+  }
+
+  function jumpTo(nextMove) {
+    setCurrectSquares(history[nextMove]);
   }
 
   return (
     <div className="game">
       <div className="game-board">
         <Board
-          xIsNext={xIsNext}
           squares={currentSquares}
           handlePlay={handlePlay}
         />
       </div>
       <div className="game-info">
-        <ol>{/*TODO*/}</ol>
+        <ol>{moves}</ol>
       </div>
     </div>
   )
