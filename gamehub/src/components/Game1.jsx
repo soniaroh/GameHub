@@ -1,6 +1,6 @@
 import Board from './Board';
 import { useState } from 'react';
-export default function Game() {
+export default function Game1() {
   const [history, setHistory] = useState([Array(9).fill(null)]);
   const [currentSquares, setCurrectSquares] = useState(history[history.length - 1]);
   const [nextMove, setNextMove] = useState('');
